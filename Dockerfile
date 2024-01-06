@@ -90,7 +90,7 @@ RUN cd $HOME/cmdline-tools/bin && \
     yes | ./sdkmanager --licenses --sdk_root=$HOME/android_sdk && \
     ./sdkmanager --verbose --sdk_root=$HOME/android_sdk \
         $(./sdkmanager --sdk_root=$HOME/android_sdk --list | grep "platforms;android-[1-9].*" | awk '{print $1}')
-ENV ANDROID_SDK $HOME/android_sdk
+ENV ANDROID_SDK /root/android_sdk
 
 # prepare workdir
 RUN mkdir $HOME/workdir
