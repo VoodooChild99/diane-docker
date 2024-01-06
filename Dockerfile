@@ -83,14 +83,19 @@ RUN cd $HOME && \
     wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip && \
     unzip commandlinetools-linux-10406996_latest.zip && \
     rm commandlinetools-linux-10406996_latest.zip
+ENV PATH ${PATH}:/root/cmdline-tools/bin
 
 # Download Android SDK
 RUN mkdir $HOME/android_sdk
-RUN cd $HOME/cmdline-tools/bin && \
-    yes | ./sdkmanager --licenses --sdk_root=$HOME/android_sdk && \
-    ./sdkmanager --verbose --sdk_root=$HOME/android_sdk \
-        $(./sdkmanager --sdk_root=$HOME/android_sdk --list | grep "platforms;android-[1-9].*" | awk '{print $1}')
 ENV ANDROID_SDK /root/android_sdk
+RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
+    sdkmanager --verbose --sdk_root=$ANDROID_SDK \
+        $(sdkmanager --sdk_root=$ANDROID_SDK --list | grep "platforms;android-[1-9].*" | awk '{print $1}')
+
+# Download Platform tools
+RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
+    sdkmanager --verbose --sdk_root=$ANDROID_SDK platform-tools
+ENV PATH ${PATH}:/root/android_sdk/platform-tools
 
 # prepare workdir
 RUN mkdir $HOME/workdir
