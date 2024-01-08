@@ -89,6 +89,11 @@ RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
     sdkmanager --verbose --sdk_root=$ANDROID_SDK "build-tools;34.0.0"
 ENV PATH ${PATH}:/root/android_sdk/build-tools/34.0.0
 
+# Download Frida
+RUN cd $HOME && \
+    wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm64.xz && \
+    unxz frida-server-11.0.2-android-arm64.xz
+
 # Install diane
 RUN cd $HOME && \
     git clone https://github.com/VoodooChild99/diane.git && \
