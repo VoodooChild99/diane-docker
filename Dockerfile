@@ -34,25 +34,12 @@ RUN apt-get -y --allow-downgrades --allow-remove-essential --allow-change-held-p
     libbz2-dev libreadline-dev libsqlite3-dev liblzma-dev \
     python2.7-dev libxml2-dev libxslt1-dev libffi-dev libtool debootstrap \
     debian-archive-keyring libglib2.0-dev libpixman-1-dev libqt4-dev \
-    binutils-multiarch nasm sudo qt5-default mercurial flex bison
+    binutils-multiarch nasm sudo qt5-default mercurial flex bison \
+    sshpass psmisc
 
 # Upgrade setuptools and pip
 RUN pip install --upgrade setuptools==44.1.1 && \
     pip install --upgrade "pip < 21.0"
-
-# Install diane
-RUN cd $HOME && \
-    git clone https://github.com/VoodooChild99/diane.git && \
-    cd diane && git checkout docker && \
-    pip install -r diane/requirements.pip
-
-# Install turi
-RUN pip install gitdb2==2.0.6 && pip install GitPython==2.1.14
-RUN cd $HOME && \
-    git clone https://github.com/VoodooChild99/turi.git && \
-    cd turi && git checkout diane-docker && \
-    ./setup.sh
-RUN cd $HOME && pip install -e turi
 
 # Install SIP
 RUN cd $HOME && \
@@ -96,6 +83,25 @@ RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
 RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
     sdkmanager --verbose --sdk_root=$ANDROID_SDK platform-tools
 ENV PATH ${PATH}:/root/android_sdk/platform-tools
+
+# Download build tools
+RUN yes | sdkmanager --licenses --sdk_root=$ANDROID_SDK && \
+    sdkmanager --verbose --sdk_root=$ANDROID_SDK "build-tools;34.0.0"
+ENV PATH ${PATH}:/root/android_sdk/build-tools/34.0.0
+
+# Install diane
+RUN cd $HOME && \
+    git clone https://github.com/VoodooChild99/diane.git && \
+    cd diane && git checkout docker && \
+    pip install -r diane/requirements.pip
+
+# Install turi
+RUN pip install gitdb2==2.0.6 && pip install GitPython==2.1.14
+RUN cd $HOME && \
+    git clone https://github.com/VoodooChild99/turi.git && \
+    cd turi && git checkout diane-docker && \
+    ./setup.sh
+RUN cd $HOME && pip install -e turi
 
 # prepare workdir
 RUN mkdir $HOME/workdir
