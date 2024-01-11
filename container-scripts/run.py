@@ -18,7 +18,6 @@ if __name__ == '__main__':
         ini_config = configparser.ConfigParser()
         ini_config['global'] = {
             "android_ip": "",
-            "device_ip": "",
             "ip_hot_spot": "",
             "pass_ap": "",
             "user_ap": "",
@@ -45,7 +44,7 @@ if __name__ == '__main__':
             "skip_methods": [],
             "android_sdk_platforms": "/root/android_sdk/platforms",
             "android_ip": "{}".format(ini_config['android_ip']),
-            "device_ip": "{}".format(ini_config['device_ip']),
+            "device_ip": "",
             "pass_ap": "{}".format(ini_config['pass_ap']),
             "results_path": "{}".format(proj_path),
             "frida_hooker_pickle": "",
