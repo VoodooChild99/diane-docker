@@ -30,7 +30,7 @@ if [[ -n $DOCKER_NAME ]]; then
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v $WORK_DIR:/root/workdir \
-            -v $SCRIPT_DIR:/root/workdir \
+            -v $SCRIPT_DIR:/root/workdir/script \
             --device=$USB_DEV \
             -w /root \
             $IMAGE
@@ -48,7 +48,7 @@ if [[ -n $DOCKER_NAME ]]; then
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v $WORK_DIR:/root/workdir \
             --device=$USB_DEV \
-            -v $SCRIPT_DIR:/root/workdir \
+            -v $SCRIPT_DIR:/root/workdir/script \
             -w /root \
             $IMAGE
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=restarting --format "{{.Names}}") ]]; then
@@ -63,7 +63,7 @@ else
         -v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v $WORK_DIR:/root/workdir \
         --device=$USB_DEV \
-        -v $SCRIPT_DIR:/root/workdir \
+        -v $SCRIPT_DIR:/root/workdir/script \
         -w /root \
 		$IMAGE
 fi

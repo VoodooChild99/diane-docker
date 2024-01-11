@@ -12,7 +12,8 @@ if __name__ == '__main__':
         print "Usage: {} [Proj]".format(sys.argv[0])
         sys.exit(1)
 
-    ini_path = os.path.join(os.path.dirname(__file__), INI_FILE_NAME)
+    ini_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
+    ini_path = os.path.join(os.path.abspath(ini_path), INI_FILE_NAME)
     if not os.path.exists(ini_path):
         ini_config = configparser.ConfigParser()
         ini_config['global'] = {
