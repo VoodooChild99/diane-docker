@@ -94,6 +94,10 @@ RUN cd $HOME && \
     wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm64.xz && \
     unxz frida-server-11.0.2-android-arm64.xz
 
+# set git proxy
+RUN if [ -n "$HTTP_PROXY" ]; then git config --global https.proxy $HTTP_PROXY && \
+    git config --global http.proxy $HTTP_PROXY; fi
+
 # Install turi
 RUN pip install gitdb2==2.0.6 && pip install GitPython==2.1.14
 RUN cd $HOME && \
