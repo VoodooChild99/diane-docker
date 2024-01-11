@@ -94,12 +94,6 @@ RUN cd $HOME && \
     wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm64.xz && \
     unxz frida-server-11.0.2-android-arm64.xz
 
-# Install diane
-RUN cd $HOME && \
-    git clone https://github.com/VoodooChild99/diane.git && \
-    cd diane && git checkout docker && \
-    pip install -r diane/requirements.pip
-
 # Install turi
 RUN pip install gitdb2==2.0.6 && pip install GitPython==2.1.14
 RUN cd $HOME && \
@@ -107,6 +101,12 @@ RUN cd $HOME && \
     cd turi && git checkout diane-docker && \
     ./setup.sh
 RUN cd $HOME && pip install -e turi
+
+# Install diane
+RUN cd $HOME && \
+    git clone https://github.com/VoodooChild99/diane.git && \
+    cd diane && git checkout docker && \
+    pip install -r diane/requirements.pip
 
 # prepare workdir
 RUN mkdir $HOME/workdir
