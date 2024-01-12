@@ -1,5 +1,6 @@
 import json
 import os
+import stat
 import sys
 import configparser
 
@@ -26,6 +27,7 @@ if __name__ == '__main__':
         }
         with open(ini_path, 'w') as f:
             ini_config.write(f)
+        os.chmod(ini_path, stat.S_IROTH | stat.S_IWOTH)
         print "Prepare config.ini before running again"
         sys.exit(1)
     
@@ -59,6 +61,7 @@ if __name__ == '__main__':
         }
         with open(config_path, 'w') as f:
             json.dump(config, f)
+        os.chmod(config_path, stat.S_IROTH | stat.S_IWOTH)
         print "Prepare {} before running again".format(config_path)
         sys.exit(1)
 
