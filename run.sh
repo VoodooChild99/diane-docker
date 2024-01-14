@@ -13,7 +13,7 @@ IMAGE=diane:latest
 DOCKER_NAME=$(docker ps --filter ancestor=$IMAGE -a --format "{{.Names}}")
 
 # REPLACE THIS
-PHONE_MODEL="M5 Note"
+PHONE_MODEL="MediaTek Inc. M5 Note"
 BUS_ID=$(lsusb | grep "$PHONE_MODEL" | awk '{print $2}')
 DEV_ID=$(lsusb | grep "$PHONE_MODEL" | awk '{print $4}')
 USB_DEV=/dev/bus/usb/$BUS_ID/$DEV_ID
@@ -32,6 +32,7 @@ if [[ -n $DOCKER_NAME ]]; then
             -v $WORK_DIR:/root/workdir \
             -v $SCRIPT_DIR:/root/workdir/script \
             --device=$USB_DEV \
+            --memory-swap=-1 \
             -w /root \
             $IMAGE
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=paused --format "{{.Names}}") ]]; then
@@ -49,6 +50,7 @@ if [[ -n $DOCKER_NAME ]]; then
             -v $WORK_DIR:/root/workdir \
             --device=$USB_DEV \
             -v $SCRIPT_DIR:/root/workdir/script \
+            --memory-swap=-1 \
             -w /root \
             $IMAGE
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=restarting --format "{{.Names}}") ]]; then
@@ -64,6 +66,7 @@ else
 		-v $WORK_DIR:/root/workdir \
         --device=$USB_DEV \
         -v $SCRIPT_DIR:/root/workdir/script \
+        --memory-swap=-1 \
         -w /root \
 		$IMAGE
 fi
