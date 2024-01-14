@@ -106,6 +106,10 @@ RUN cd $HOME && \
     ./setup.sh
 RUN cd $HOME && pip install -e turi
 
+# Configure ADB key
+RUN if [ ! -d "$HOME/.android" ]; then mkdir $HOME/.android; fi
+COPY adbkey* /root/.android/
+
 # Install diane
 RUN cd $HOME && \
     git clone https://github.com/VoodooChild99/diane.git && \

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# copy authorized adb keys
+DIR=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+cp ~/.android/adbkey* $DIR/
+
 # set PROXY_ADDRESS if you need a proxy
 
 # remove related containers
