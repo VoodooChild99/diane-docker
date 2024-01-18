@@ -81,6 +81,14 @@ if __name__ == '__main__':
         'if_ap',
         'device_id',
     ]
+    init_lists = [
+        'android_ip',
+        'pass_ap',
+        'user_ap',
+        'ip_hot_spot',
+        'if_ap',
+        'device_id',
+    ]
     
     for item in check_lists:
         if item not in config or not config[item]:
@@ -90,6 +98,12 @@ if __name__ == '__main__':
             print "please fill-in {}".format(item)
             sys.exit(1)
     
+    config_changed = False
+    
+    for item in init_lists:
+        if config[item] != ini_config[item]:
+            config[item] = ini_config[item]
+            config_changed = True
 
     if 'frida_hooker_pickle' not in config or not config['frida_hooker_pickle']:
         hooker_file = os.path.join(
@@ -107,8 +121,6 @@ if __name__ == '__main__':
     
     # run the command
     os.system('python /root/diane/diane/run.py {}'.format(config_path))
-
-    config_changed = False
     
     if 'frida_hooker_pickle' not in config or not config['frida_hooker_pickle']:
         # try copy the results
@@ -126,7 +138,7 @@ if __name__ == '__main__':
             'leaves_{}'.format(config['proc_name']))
         if os.path.exists(leaf_file):
             print "Update leaf_file to {}".format(leaf_file)
-            config['leaf_file'] = leaf_file
+            config['leaf_pickle'] = leaf_file
             config_changed = True
     
     if config_changed:
