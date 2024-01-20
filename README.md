@@ -7,8 +7,10 @@
 
 ## 环境配置
 1. 安装 `docker`：参考[官方指南](https://docs.docker.com/engine/install/)
-2. 克隆本项目到本地：`git clone https://github.com/VoodooChild99/diane-docker.git`
-2. 构建docker镜像:
+2. 安装依赖：`sudo apt-get install android-tools-adb usbutils`
+3. 使用adb连接手机，并在手机上永远允许本设备进行调试
+4. 克隆本项目到本地：`git clone https://github.com/VoodooChild99/diane-docker.git`
+5. 构建docker镜像:
 ```shell
 cd diane-docker
 # 如果你在墙后，请运行以下命令设置代理，否则可以忽略该命令。
@@ -20,7 +22,7 @@ export PROXY_ADDRESS=http://example.com:port
 ```
 
 ## 运行
-运行脚本`./run.sh`来启动环境，后续操作都在容器中完成。可以多次运行`./run.sh`获得多个`shell`。
+运行脚本`./run.sh`来启动环境，后续操作都在容器中完成。可以多次运行`./run.sh`获得多个`shell`。`run.sh`中的`PHONE_MODEL`变量需要根据自己的手机型号进行调整
 
 **！！注意！！**
 进入容器后，材料都在`/root`目录下，需要注意以下目录：
