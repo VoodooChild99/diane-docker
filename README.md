@@ -3,7 +3,7 @@
 一个可以运行[`DIANE`](https://sites.cs.ucsb.edu/~vigna/publications/2021_SP_Diane.pdf)的docker环境。
 
 * 以下步骤在`Ubuntu 20.04`环境下能够成功运行，其他环境未经测试，最后测试时间：2024-01-06
-* `DIANE`比较吃内存，建议机器至少配备32GB内存
+* `DIANE`比较吃内存，建议机器至少配备64GB内存
 
 ## 环境配置
 1. 安装 `docker`：参考[官方指南](https://docs.docker.com/engine/install/)
@@ -28,16 +28,31 @@ export PROXY_ADDRESS=http://example.com:port
 * `/root/android_sdk`：内含全版本Android SDK
 * `/root/workdir`：用于数据持久化的工作目录，由host的`diane-docker/workdir`目录挂载，最好保证一切数据材料（输入或输出）都在这个目录
 
+## 运行环境
+需要一台root后的android手机，一台pc，以及一台热点设备。要求android手机连接到热点设备提供的网络，android设备通过usb连接pc，pc能够ssh连接到热点设备上
 
-## `DIANE`使用方法
+## 使用方法
+
+### 配置Frida和adb
+```shell
+python /root/workdir/script/prep_frida.py DEVICE_ID
+```
+用来在手机上启动frida，并且配置adb。运行结束不会自动退出，需要ctrl+C
+
+### 录制UI操作
+```shell
+python /root/workdir/script/record.py /root/workdir/PROJ_DIR
+```
+用来录制和设备交互的UI动作，运行DIANE前**必须**先录制
+
+### 运行DIANE
+
 ```shell
 # CONFIG：指向配置文件路径
-# PHASE：可选参数，用于设置运行阶段，一般不用特别设置
-python diane/run.py CONFIG [PHASE]
+python /root/workdir/script/run.py /root/workdir/PROJ_DIR
 ```
 
-### 配置文件
-为了使用`DIANE`，分析人员需要对每一个待分析目标编写`JSON`格式的配置文件，字段及其含义如下：
+首次运行会帮你在`/root/workdir`下面创建一个`config.ini`文件，并在`/root/workdir/PROJ_DIR`下创建一个`config.json`文件，具体含义如下
 
 | 字段 | 必需 | 描述 |
 | :--- | :--- | :--- |
@@ -62,5 +77,5 @@ python diane/run.py CONFIG [PHASE]
 |`pcap_path`                | x | TODO |
 |`results_path`             | √ | 存放fuzz结果 |
 |`fmt_data_keys`            | x | 代码中没用到 |
-
-### 录制UI操作
+|`user_ap`                  | √ | 热点设备的用户名 |
+|`if_ap`                    | √ | 热点设备的接口名 |
