@@ -23,6 +23,10 @@ if __name__ == '__main__':
             "pass_ap": "",
             "user_ap": "",
             "if_ap": "",
+            "ip_hot_spot_cloud": "",
+            "pass_ap_cloud": "",
+            "user_ap_cloud": "",
+            "if_ap_cloud": "",
             "device_id": "",
         }
         with open(ini_path, 'w') as f:
@@ -57,6 +61,12 @@ if __name__ == '__main__':
             "apk_path": "{}/app.apk".format(proj_path),
             "if_ap": "{}".format(ini_config['if_ap']),
             "device_id": "{}".format(ini_config['device_id']),
+            "cloud_ip": "",
+            "phys_ip": "",
+            "ip_hot_spot_cloud": "{}".format(ini_config['ip_hot_spot_cloud']),
+            "pass_ap_cloud": "{}".format(ini_config['pass_ap_cloud']),
+            "user_ap_cloud": "{}".format(ini_config['user_ap_cloud']),
+            "if_ap_cloud": "{}".format(ini_config['if_ap_cloud']),
             "blt": False
         }
         with open(config_path, 'w') as f:
@@ -89,6 +99,14 @@ if __name__ == '__main__':
         'if_ap',
         'device_id',
     ]
+    check_lists_cloud = [
+        "cloud_ip",
+        "phys_ip",
+        "ip_hot_spot_cloud",
+        "pass_ap_cloud",
+        "user_ap_cloud",
+        "if_ap_cloud",
+    ]
     
     for item in check_lists:
         if item not in config or not config[item]:
@@ -97,6 +115,12 @@ if __name__ == '__main__':
                 sys.exit(1)
             print "please fill-in {}".format(item)
             sys.exit(1)
+    
+    if 'cloud_ip' in config and config['cloud_ip']:
+        for item in check_lists_cloud:
+            if item not in config or not config[item]:
+                print "please fill-in {}".format(item)
+                sys.exit(1)
     
     config_changed = False
     
