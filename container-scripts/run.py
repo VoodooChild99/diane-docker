@@ -149,6 +149,13 @@ if __name__ == '__main__':
         if os.path.exists(leaf_file):
             os.remove(leaf_file)
     
+    if config_changed:
+        print "config updated, dump to file"
+        with open(config_path, 'w') as f:
+            json.dump(config, f)
+    
+    config_changed = False
+    
     # run the command
     os.system('python /root/diane/diane/run.py {}'.format(config_path))
     
