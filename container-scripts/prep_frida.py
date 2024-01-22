@@ -9,7 +9,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Prepare Frida in your phone')
     parser.add_argument('device_id')
     parser.add_argument('--arm32', action='store_true', default=False)
-    parser.add_argument('--disable-bypass', action='store_true', default=False)
+    parser.add_argument('--enable-bypass', action='store_true', default=False)
     args = parser.parse_args()
 
     adbd = ADBDriver(device_id=args.device_id, f_path=None)
@@ -20,12 +20,12 @@ if __name__ == '__main__':
     adbd.adb_su_cmd('rm /data/local/tmp/{}'.format(frida_prog))
     adbd.adb_su_cmd('rm /data/local/tmp/frd1102')
     adbd.adb_cmd(['forward', '--remove-all'])
-    if not args.disable_bypass:
+    if args.enable_bypass:
         adbd.adb_cmd(['forward', 'tcp:27047', 'tcp:9999'])
     adbd.adb_cmd(['push', '/root/{}'.format(frida_prog), '/data/local/tmp'])
     adbd.adb_su_cmd('chmod +x /data/local/tmp/{}'.format(frida_prog))
     adbd.adb_su_cmd('cp /data/local/tmp/{} /data/local/tmp/frd1102'.format(frida_prog))
-    if not args.disable_bypass:
+    if args.enable_bypass:
         adbd.adb_su_cmd('/data/local/tmp/frd1102 -l 0.0.0.0:9999')
     else:
         adbd.adb_su_cmd('/data/local/tmp/frd1102')
