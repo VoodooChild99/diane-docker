@@ -37,7 +37,9 @@ export PROXY_ADDRESS=http://example.com:port
 
 ### 配置Frida和adb
 ```shell
-python /root/workdir/script/prep_frida.py DEVICE_ID
+# --arm32: 使用arm32版本的Frida server，如果不提供，默认使用ARM64版本
+# --enable-bypass：开启Frida检测绕过机制，如果不提供，默认不启用该机制
+python /root/workdir/script/prep_frida.py [--arm32] [--enable-bypass] <DEVICE_ID>
 ```
 用来在手机上启动frida，并且配置adb。运行结束不会自动退出，需要ctrl+C
 
@@ -81,3 +83,10 @@ python /root/workdir/script/run.py /root/workdir/PROJ_DIR
 |`fmt_data_keys`            | x | 代码中没用到 |
 |`user_ap`                  | √ | 热点设备的用户名 |
 |`if_ap`                    | √ | 热点设备的接口名 |
+|`phys_ip`                  | x | 实际设备的IP，仅在云场景下有用 |
+|`ip_hot_spot_cloud`        | x | 云场景下，设备连接的热点的IP |
+|`user_ap_cloud`            | x | 云场景下，设备连接的热点设备的用户名 |
+|`pass_ap_cloud`            | x | 云场景下，设备连接的热点设备的口令 |
+|`if_ap_cloud`              | x | 云场景下，设备连接的热点设备的接口名 |
+|`spawn_timeout`            | x | 等待APP启动的时间（单位是秒，默认30秒） |
+|`enable_bypass`            | x | 开启Frida检测绕过机制 |
