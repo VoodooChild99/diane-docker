@@ -38,6 +38,19 @@ if __name__ == '__main__':
     ini_config = configparser.ConfigParser()
     ini_config.read(ini_path)
     ini_config = ini_config["global"]
+
+    init_lists = [
+        'android_ip',
+        'pass_ap',
+        'user_ap',
+        'ip_hot_spot',
+        'if_ap',
+        'device_id',
+    ]
+    for item in init_lists:
+        if (item not in ini_config) or not ini_config[item]:
+            print "Fillin config.ini first"
+            sys.exit(1)
     
     config_path = os.path.join(proj_path, 'config.json')
     if not os.path.exists(config_path):
@@ -88,14 +101,6 @@ if __name__ == '__main__':
         'user_ap',
         'ip_hot_spot',
         'apk_path',
-        'if_ap',
-        'device_id',
-    ]
-    init_lists = [
-        'android_ip',
-        'pass_ap',
-        'user_ap',
-        'ip_hot_spot',
         'if_ap',
         'device_id',
     ]
