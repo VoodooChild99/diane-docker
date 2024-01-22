@@ -93,6 +93,9 @@ ENV PATH ${PATH}:/root/android_sdk/build-tools/34.0.0
 RUN cd $HOME && \
     wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm64.xz && \
     unxz frida-server-11.0.2-android-arm64.xz
+RUN cd $HOME && \
+    wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm.xz && \
+    unxz frida-server-11.0.2-android-arm.xz
 
 # set git proxy
 RUN if [ -n "$HTTP_PROXY" ]; then git config --global https.proxy $HTTP_PROXY && \
