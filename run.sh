@@ -12,12 +12,7 @@ IMAGE=diane:latest
 
 DOCKER_NAME=$(docker ps --filter ancestor=$IMAGE -a --format "{{.Names}}")
 
-# REPLACE THIS
-PHONE_MODEL="MediaTek Inc. M5 Note"
-BUS_ID=$(lsusb | grep "$PHONE_MODEL" | awk '{print $2}')
-DEV_ID=$(lsusb | grep "$PHONE_MODEL" | awk '{print $4}')
-USB_DEV=/dev/bus/usb/$BUS_ID/$DEV_ID
-USB_DEV=${USB_DEV%":"}
+USB_DEV=/dev/bus/usb
 
 if [[ -n $DOCKER_NAME ]]; then
 	# container exists, check status
