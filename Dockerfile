@@ -97,6 +97,34 @@ RUN cd $HOME && \
     wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm.xz && \
     unxz frida-server-11.0.2-android-arm.xz
 
+# Build and Install FFmpeg
+RUN apt-get -y --allow-downgrades --allow-remove-essential --allow-change-held-packages install \
+    python3-pip pkg-config libusb-1.0-0 libusb-1.0-0-dev ninja-build
+RUN python3 -m pip install meson==0.52.1
+
+RUN cd $HOME && \
+    git clone https://github.com/FFmpeg/FFmpeg.git && \
+    cd FFmpeg && \
+    git checkout n6.1 && \
+    ./configure && \
+    make -j`nproc` && \
+    make install
+
+# Build and Install libsdl2
+RUN cd $HOME && \
+    git clone https://github.com/libsdl-org/SDL.git && \
+    cd SDL && \
+    git checkout release-2.0.6 && \
+    ./configure && \
+    make -j`nproc` && \
+    make install
+
+# Build Scrcpy
+RUN cd $HOME && \
+    git clone https://github.com/Genymobile/scrcpy.git && \
+    cd scrcpy && \
+    ./install_release.sh
+
 # set git proxy
 RUN if [ -n "$HTTP_PROXY" ]; then git config --global https.proxy $HTTP_PROXY && \
     git config --global http.proxy $HTTP_PROXY; fi
