@@ -14,6 +14,18 @@ DOCKER_NAME=$(docker ps --filter ancestor=$IMAGE -a --format "{{.Names}}")
 
 USB_DEV=/dev/bus/usb
 
+DOCKER_RUN_FLAGS="
+-id \
+-e DISPLAY=$DISPLAY \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v $WORK_DIR:/root/workdir \
+-v $SCRIPT_DIR:/root/workdir/script \
+--device=$USB_DEV \
+--memory-swap=-1 \
+-w /root \
+--net=host \
+"
+
 if [[ -n $DOCKER_NAME ]]; then
 	# container exists, check status
     if [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=running --format "{{.Names}}") ]]; then
@@ -21,15 +33,7 @@ if [[ -n $DOCKER_NAME ]]; then
         :
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=created --format "{{.Names}}") ]]; then
         # created, never running, run it
-        docker run -id \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v $WORK_DIR:/root/workdir \
-            -v $SCRIPT_DIR:/root/workdir/script \
-            --device=$USB_DEV \
-            --memory-swap=-1 \
-            -w /root \
-            $IMAGE
+        docker run $DOCKER_RUN_FLAGS $IMAGE
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=paused --format "{{.Names}}") ]]; then
         # paused, unpause it
         docker unpause $DOCKER_NAME
@@ -39,15 +43,7 @@ if [[ -n $DOCKER_NAME ]]; then
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=dead --format "{{.Names}}") ]]; then
         # dead, remove it then run a new one
         docker rm $DOCKER_NAME
-        docker run -id \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v $WORK_DIR:/root/workdir \
-            --device=$USB_DEV \
-            -v $SCRIPT_DIR:/root/workdir/script \
-            --memory-swap=-1 \
-            -w /root \
-            $IMAGE
+        docker run $DOCKER_RUN_FLAGS $IMAGE
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=restarting --format "{{.Names}}") ]]; then
         echo "[*] The container is restarting, please try later!"
     elif [[ -n $(docker ps -a --filter name=$DOCKER_NAME --filter status=removing --format "{{.Names}}") ]]; then
@@ -55,15 +51,7 @@ if [[ -n $DOCKER_NAME ]]; then
     fi
 else
 	# run otherwise
-	docker run -id \
-        -e DISPLAY=$DISPLAY \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v $WORK_DIR:/root/workdir \
-        --device=$USB_DEV \
-        -v $SCRIPT_DIR:/root/workdir/script \
-        --memory-swap=-1 \
-        -w /root \
-		$IMAGE
+	docker run $DOCKER_RUN_FLAGS $IMAGE
 fi
 
 DOCKER_NAME=$(docker ps --filter ancestor=$IMAGE -a --format "{{.Names}}")
