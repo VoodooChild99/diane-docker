@@ -4,15 +4,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ENV TZ=Asia/Shanghai
 
-ARG proxy_address
-
-ENV HTTP_PROXY=$proxy_address
-ENV HTTPS_PROXY=$proxy_address
-ENV http_proxy=$proxy_address
-ENV https_proxy=$proxy_address
-ENV NO_PROXY=localhost,127.0.0.1
-ENV no_proxy=localhost,127.0.0.1
-
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
@@ -43,8 +34,10 @@ RUN pip install --upgrade setuptools==44.1.1 && \
 
 # Install SIP
 RUN cd $HOME && \
-    hg clone https://www.riverbankcomputing.com/hg/sip && \
-    cd sip && hg up 4.16.6 && \
+    git clone https://github.com/Python-SIP/sip.git && \
+    cd sip && git checkout 4.16.6 && \
+    sed -i '201 i \    version = (4, 16, 6)' build.py && \
+    sed -i '202 i \    release_suffix = ""' build.py && \
     python build.py prepare && \
     python configure.py && \
     make -j`nproc` && \
@@ -96,38 +89,6 @@ RUN cd $HOME && \
 RUN cd $HOME && \
     wget https://github.com/frida/frida/releases/download/11.0.2/frida-server-11.0.2-android-arm.xz && \
     unxz frida-server-11.0.2-android-arm.xz
-
-# Build and Install FFmpeg
-RUN apt-get -y --allow-downgrades --allow-remove-essential --allow-change-held-packages install \
-    python3-pip pkg-config libusb-1.0-0 libusb-1.0-0-dev ninja-build
-RUN python3 -m pip install meson==0.52.1
-
-RUN cd $HOME && \
-    git clone https://github.com/FFmpeg/FFmpeg.git && \
-    cd FFmpeg && \
-    git checkout n6.1 && \
-    ./configure && \
-    make -j`nproc` && \
-    make install
-
-# Build and Install libsdl2
-RUN cd $HOME && \
-    git clone https://github.com/libsdl-org/SDL.git && \
-    cd SDL && \
-    git checkout release-2.0.6 && \
-    ./configure && \
-    make -j`nproc` && \
-    make install
-
-# Build Scrcpy
-RUN cd $HOME && \
-    git clone https://github.com/Genymobile/scrcpy.git && \
-    cd scrcpy && \
-    ./install_release.sh
-
-# set git proxy
-RUN if [ -n "$HTTP_PROXY" ]; then git config --global https.proxy $HTTP_PROXY && \
-    git config --global http.proxy $HTTP_PROXY; fi
 
 # Install turi
 RUN pip install gitdb2==2.0.6 && pip install GitPython==2.1.14
