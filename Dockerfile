@@ -35,7 +35,7 @@ RUN apt-get -y --allow-downgrades --allow-remove-essential --allow-change-held-p
     python2.7-dev libxml2-dev libxslt1-dev libffi-dev libtool debootstrap \
     debian-archive-keyring libglib2.0-dev libpixman-1-dev libqt4-dev \
     binutils-multiarch nasm sudo qt5-default mercurial flex bison \
-    sshpass psmisc
+    sshpass psmisc vim
 
 # Upgrade setuptools and pip
 RUN pip install --upgrade setuptools==44.1.1 && \
