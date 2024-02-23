@@ -71,7 +71,7 @@ python /root/workdir/script/run.py /root/workdir/PROJ_DIR
 |`proc_name`                | √ | Android APP进程名 |
 |`device_id`                | √ | Android设备id，用于连接`adb` |
 |`android_ip`               | √ | Android设备IP地址 |
-|`device_ip`                | √ | IoT设备IP地址 |
+|`device_ip`                | √ | IoT设备IP地址,云场景下是与手机通信的服务器IP地址 |
 |`ip_hot_spot`              | √ | 热点IP地址 |
 |`pass_ap`                  | √ | 热点口令 |
 |`skip_methods`             | √ | Frida hook method黑名单 |
@@ -90,3 +90,6 @@ python /root/workdir/script/run.py /root/workdir/PROJ_DIR
 |`if_ap_cloud`              | x | 云场景下，设备连接的热点设备的接口名 |
 |`spawn_timeout`            | x | 等待APP启动的时间（单位是秒，默认30秒） |
 |`enable_bypass`            | x | 开启Frida检测绕过机制 |
+|`sweet_spots`              | x | sweet spot函数，fuzz的潜在对象，需要手动从`sweet_spot.json`中拷贝，如果不提供会再分析一遍 |
+|`send_functions`           | x | senders函数，需要手动从`senders.json`中拷贝，如果不提供会再分析一遍 |
+|`skip_methods`             | x | 分析过程中需要忽略的方法，需要手动从`ignore_methods.json`中拷贝 |
